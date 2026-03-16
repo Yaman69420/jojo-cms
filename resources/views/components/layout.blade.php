@@ -182,7 +182,33 @@
                 <div class="max-w-6xl mx-auto relative z-10">
                     <x-flash />
                     {{ $slot }}
-                </div>
+
+                    <!-- Footer -->
+                    <footer class="mt-20 pt-16 pb-8 border-t-4 border-slate-900/50">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+                            <div>
+                                <div class="flex items-center mb-4">
+                                    <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center mr-2 font-bold text-lg text-purple-900 jojo-border shadow-[2px_2px_0px_#111]">★</div>
+                                    <span class="text-3xl text-yellow-400 bangers transform -skew-x-6">JOJO CMS</span>
+                                </div>
+                                <p class="text-slate-400 max-w-sm font-bold uppercase tracking-widest text-sm leading-relaxed">
+                                    The ultimate Sanctuary for JoJo fans. Explore the fated history of the Joestar bloodline.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-black uppercase tracking-[0.2em]">
+                            <p class="text-slate-500">
+                                &copy; {{ date('Y') }} <span class="text-yellow-400/50">JOJO CMS</span>. ALL RIGHTS RESERVED.
+                            </p>
+                            <p class="text-fuchsia-600/40">
+                                INSPIRED BY THE LEGENDARY <a href="https://www.google.com/search?q=Hirohiko+Araki" target="_blank" class="text-fuchsia-400/60 hover:text-fuchsia-400 transition-colors cursor-help decoration-fuchsia-500/30 underline-offset-4 hover:underline" title="The Creator of JoJo">HIROHIKO ARAKI</a>
+                            </p>
+                            <p class="text-slate-500">
+                                CREATED BY <span class="text-white">YAMAN</span>
+                            </p>
+                        </div>
+                    </footer>
             </main>
         </div>
     </div>
