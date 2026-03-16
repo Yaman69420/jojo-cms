@@ -18,7 +18,12 @@ class HomeController extends Controller
             'users' => User::count(),
         ];
 
-        $latestEpisode = Episode::with(['part', 'media'])->orderBy('release_date', 'desc')->first();
+        $latestEpisode = Episode::with(['part', 'media'])
+            ->join('parts', 'episodes.part_id', '=', 'parts.id')
+            ->orderBy('parts.number', 'desc')
+            ->orderBy('episodes.episode_number', 'desc')
+            ->select('episodes.*')
+            ->first();
 
         $topEpisodes = Episode::query()
             ->with(['part', 'media'])

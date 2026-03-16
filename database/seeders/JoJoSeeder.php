@@ -11,6 +11,17 @@ class JoJoSeeder extends Seeder
 {
     public function run(): void
     {
+        // Add Admin User
+        \App\Models\User::updateOrCreate(
+            ['email' => 'yaman.terkawi.yt@gmail.com'],
+            [
+                'name' => 'Yaman Terkawi',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'is_admin' => true,
+                'email_verified_at' => now(),
+            ]
+        );
+
         $all_data = [
             [
                 'number' => 1,
