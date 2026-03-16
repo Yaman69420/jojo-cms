@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'avatar_url',
     ];
 
     /**
@@ -74,6 +75,30 @@ class User extends Authenticatable
     public function watchedEpisodes()
     {
         return $this->belongsToMany(Episode::class, 'watched_episodes')->withTimestamps();
+    }
+
+    /**
+     * Users that are following this user.
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')->withTimestamps();
+    }
+
+    /**
+     * Users that this user is following.
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')->withTimestamps();
+    }
+
+    /**
+     * Check if the user is following another user.
+     */
+    public function isFollowing(User $user)
+    {
+        return $this->following()->where('following_id', $user->id)->exists();
     }
 
     /**

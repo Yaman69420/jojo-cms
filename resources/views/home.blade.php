@@ -74,59 +74,80 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
-        <!-- Highlights -->
+        <!-- Highlights / Hype Section -->
         <div class="lg:col-span-2">
-            <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-fuchsia-600 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">COMMUNITY HIGHLIGHTS</h3>
+            <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-fuchsia-600 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">BREAKING NEWS: PART 7 ARRIVES!</h3>
             
-            <div class="space-y-6">
-                @foreach($topEpisodes as $episode)
-                <a href="{{ route('episodes.show', $episode) }}" class="flex flex-col md:flex-row bg-white text-purple-900 jojo-border jojo-shadow overflow-hidden hover:scale-[1.01] transition-transform group">
-                    <div class="w-full md:w-48 bg-purple-900 flex items-center justify-center p-4 border-b-4 md:border-b-0 md:border-r-4 border-slate-900">
-                        @if($episode->media->first())
-                            <img src="{{ asset('storage/' . $episode->media->first()->path) }}" class="w-full h-full object-cover">
-                        @else
-                            <span class="text-5xl bangers text-yellow-400">#{{ $episode->episode_number }}</span>
-                        @endif
+            <div class="relative bg-white text-purple-900 jojo-border jojo-shadow overflow-hidden group flex flex-col md:flex-row min-h-[500px]">
+                <!-- Poster Side -->
+                <div class="w-full md:w-72 bg-purple-800 relative border-b-4 md:border-b-0 md:border-r-4 border-slate-900 overflow-hidden">
+                    <img src="{{ asset('storage/posters/sbr_poster.png') }}" 
+                         onerror="this.style.display='none'"
+                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute top-4 left-4 z-20">
+                        <span class="inline-block bg-yellow-400 text-purple-900 bangers text-xl px-4 py-1 jojo-border animate-bounce">COMING THIS WEEK</span>
                     </div>
-                    <div class="p-6 flex-1">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="block text-xs font-black text-fuchsia-600 uppercase tracking-widest">PART {{ $episode->part->number }}</span>
-                                <h4 class="text-3xl bangers uppercase tracking-widest group-hover:text-indigo-600 transition-colors">{{ $episode->title }}</h4>
+                </div>
+                
+                <!-- Info Side -->
+                <div class="flex-1 flex flex-col">
+                    <div class="p-8 bg-gradient-to-br from-white to-purple-50 flex-1">
+                        <h4 class="text-7xl text-purple-900 bangers uppercase tracking-tighter leading-none mb-2">STEEL BALL RUN</h4>
+                        <p class="text-fuchsia-600 font-bold text-xl uppercase tracking-widest mb-6">The race of a lifetime begins.</p>
+                        
+                        <p class="text-slate-700 font-bold leading-relaxed mb-10">
+                            Prepare yourself for the most ambitious Part yet. Join Johnny Joestar and Gyro Zeppeli as they race across the American frontier in a 6,000km quest for glory and the ultimate prize.
+                        </p>
+                        
+                        <div class="flex gap-4 max-w-sm">
+                            <div class="bg-white p-4 jojo-border text-center flex-1 shadow-[2px_2px_0px_#111]">
+                                <span class="block text-4xl bangers text-purple-900 leading-none">4</span>
+                                <span class="block text-xs font-black text-slate-400 uppercase mt-1">DAYS TO GO</span>
                             </div>
-                            <div class="text-right">
-                                <span class="block text-xl bangers text-yellow-600">♥ {{ number_format($episode->ratings_avg_rating, 1) }}</span>
-                                <span class="block text-xs font-black text-slate-400 uppercase">USER AVG</span>
+                            <div class="bg-white p-4 jojo-border text-center flex-1 shadow-[2px_2px_0px_#111]">
+                                <span class="block text-4xl bangers text-purple-900 leading-none">12</span>
+                                <span class="block text-xs font-black text-slate-400 uppercase mt-1">HOURS</span>
                             </div>
                         </div>
                     </div>
-                </a>
-                @endforeach
+                    
+                    <div class="p-6 bg-slate-900 flex items-center justify-between">
+                        <span class="hidden md:inline-block text-fuchsia-400 font-black uppercase tracking-widest text-sm">March 19th Premiere</span>
+                        <a href="https://www.youtube.com/watch?v=b51C8AbRDGU" target="_blank" class="bg-yellow-400 text-purple-900 bangers text-3xl px-10 py-4 jojo-border jojo-shadow hover:bg-yellow-300 transition-colors uppercase tracking-widest transform hover:-rotate-1 no-underline">
+                            WATCH TRAILER
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Latest Update -->
+        <!-- Latest Episode -->
         <div class="lg:col-span-1">
-            <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-slate-900 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">LATEST PART</h3>
+            <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-slate-900 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">LATEST EPISODE</h3>
             
-            @if($latestPart)
+            @if($latestEpisode)
             <div class="bg-white p-6 jojo-border jojo-shadow">
-                <div class="mb-6 jojo-border aspect-square bg-purple-900 overflow-hidden relative">
-                    @if($latestPart->media->first())
-                        <img src="{{ asset('storage/' . $latestPart->media->first()->path) }}" class="w-full h-full object-cover">
+                <div class="mb-6 jojo-border aspect-video bg-purple-900 overflow-hidden relative">
+                    @if($latestEpisode->thumbnail_url)
+                        <img src="{{ $latestEpisode->thumbnail_url }}" class="w-full h-full object-cover">
+                    @elseif($latestEpisode->media->first())
+                        <img src="{{ asset('storage/' . $latestEpisode->media->first()->path) }}" class="w-full h-full object-cover">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-8xl bangers text-yellow-400 opacity-20">P{{ $latestPart->number }}</div>
+                        <div class="w-full h-full flex items-center justify-center text-8xl bangers text-yellow-400 opacity-20">EP{{ $latestEpisode->episode_number }}</div>
                     @endif
-                    <div class="absolute top-4 left-4 bg-yellow-400 text-purple-900 bangers text-3xl px-4 py-2 jojo-border">
-                        PART {{ $latestPart->number }}
+                    <div class="absolute top-4 left-4 bg-yellow-400 text-purple-900 bangers text-2xl px-4 py-2 jojo-border">
+                        EP #{{ $latestEpisode->episode_number }}
                     </div>
                 </div>
-                <h4 class="text-4xl bangers text-purple-900 uppercase tracking-widest mb-4 leading-tight">{{ $latestPart->title }}</h4>
+                <div class="mb-2">
+                    <span class="text-xs font-black text-fuchsia-600 uppercase tracking-widest">PART {{ $latestEpisode->part->number }}: {{ $latestEpisode->part->title }}</span>
+                </div>
+                <h4 class="text-4xl bangers text-purple-900 uppercase tracking-widest mb-4 leading-tight">{{ $latestEpisode->title }}</h4>
                 <p class="text-slate-600 font-bold mb-8 leading-relaxed">
-                    {{ Str::limit($latestPart->summary, 150) }}
+                    {{ Str::limit($latestEpisode->summary, 120) }}
                 </p>
-                <a href="{{ route('parts.show', $latestPart) }}" class="inline-block w-full text-center bg-indigo-600 text-white bangers text-2xl py-4 jojo-border jojo-shadow hover:bg-indigo-500 transform hover:-translate-y-1 transition-transform uppercase tracking-widest">
-                    EXPLORE PART
+                <a href="{{ route('episodes.show', $latestEpisode) }}" class="inline-block w-full text-center bg-indigo-600 text-white bangers text-2xl py-4 jojo-border jojo-shadow hover:bg-indigo-500 transform hover:-translate-y-1 transition-transform uppercase tracking-widest no-underline">
+                    VIEW EPISODE
                 </a>
             </div>
             @endif

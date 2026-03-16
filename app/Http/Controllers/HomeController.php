@@ -18,7 +18,7 @@ class HomeController extends Controller
             'users' => User::count(),
         ];
 
-        $latestPart = Part::with('media')->orderBy('number', 'desc')->first();
+        $latestEpisode = Episode::with(['part', 'media'])->orderBy('release_date', 'desc')->first();
 
         $topEpisodes = Episode::query()
             ->with(['part', 'media'])
@@ -38,6 +38,6 @@ class HomeController extends Controller
             ];
         }
 
-        return view('home', compact('stats', 'latestPart', 'topEpisodes', 'userActivity'));
+        return view('home', compact('stats', 'latestEpisode', 'topEpisodes', 'userActivity'));
     }
 }

@@ -256,6 +256,14 @@ class JoJoSeeder extends Seeder
                     ['title' => 'What a Wonderful World', 'air_date' => 'December 1, 2022'],
                 ],
             ],
+            [
+                'number' => 7,
+                'title' => 'Steel Ball Run',
+                'release_year' => 2026,
+                'summary' => 'In 1890s America, jockey Johnny Joestar and executioner Gyro Zeppeli cross the American continent in a 6,000km horse race for a 50 million dollar prize and a secret holy objective.',
+                'trailer_url' => 'https://www.youtube.com/watch?v=b51C8AbRDGU',
+                'episodes' => [],
+            ],
         ];
 
         // Load all summaries from JSON files
@@ -294,23 +302,33 @@ class JoJoSeeder extends Seeder
             $episodes = $pData['episodes'];
             unset($pData['episodes']);
 
-            $part = Part::create($pData);
+            $part = Part::updateOrCreate(
+                ['number' => $pData['number']],
+                $pData
+            );
 
-            // Associate poster image
-            $part->media()->create(['path' => 'posters/part'.$part->number.'.png']);
+            // Associate poster image if not already present
+            $posterFile = $part->number == 7 ? 'sbr_poster.png' : 'part'.$part->number.'.png';
+            if (!$part->media()->where('path', 'posters/' . $posterFile)->exists()) {
+                $part->media()->create(['path' => 'posters/' . $posterFile]);
+            }
 
             foreach ($episodes as $index => $eData) {
                 $summary = $summaries[$absoluteCounter] ?? 'A fated encounter in the history of the Joestars.';
 
-                Episode::create([
-                    'part_id' => $part->id,
-                    'title' => $eData['title'],
-                    'episode_number' => $index + 1,
-                    'release_date' => Carbon::parse($eData['air_date'])->format('Y-m-d'),
-                    'imdb_score' => rand(75, 98) / 10,
-                    'summary' => $summary,
-                    'thumbnail_url' => $thumbnails[$absoluteCounter] ?? null,
-                ]);
+                Episode::updateOrCreate(
+                    [
+                        'part_id' => $part->id,
+                        'episode_number' => $index + 1
+                    ],
+                    [
+                        'title' => $eData['title'],
+                        'release_date' => Carbon::parse($eData['air_date'])->format('Y-m-d'),
+                        'imdb_score' => rand(75, 98) / 10,
+                        'summary' => $summary,
+                        'thumbnail_url' => $thumbnails[$absoluteCounter] ?? null,
+                    ]
+                );
 
                 $absoluteCounter++;
             }

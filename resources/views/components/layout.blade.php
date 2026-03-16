@@ -83,6 +83,21 @@
                         <svg class="w-6 h-6 mr-3 drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                         <span class="text-xl uppercase tracking-wider">Episodes</span>
                     </x-nav-link>
+
+                    <x-nav-link href="{{ route('profile.index') }}" :active="request()->routeIs('profile.index')" @click="sidebarOpen = false">
+                        <svg class="w-6 h-6 mr-3 drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span class="text-xl uppercase tracking-wider">Community</span>
+                    </x-nav-link>
+
+                    <div class="px-4 py-2">
+                        <form action="{{ route('profile.index') }}" method="GET" class="relative group">
+                            <input type="text" name="search" placeholder="Search users..." 
+                                   class="w-full bg-purple-950/50 border-2 border-slate-900 px-3 py-1.5 text-sm bangers tracking-widest text-yellow-400 placeholder-purple-400/50 focus:outline-none focus:border-yellow-400 transition-colors">
+                            <button type="submit" class="absolute right-2 top-1.5 text-purple-400 group-hover:text-yellow-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>
+                        </form>
+                    </div>
                     
                     @auth
                         @if(auth()->user()->is_admin)
@@ -109,7 +124,7 @@
 
                     @auth
                         <div class="mb-4">
-                            <x-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')" @click="sidebarOpen = false">
+                            <x-nav-link href="{{ route('profile.show', auth()->user()) }}" :active="request()->routeIs('profile.show')" @click="sidebarOpen = false">
                                 <svg class="w-6 h-6 mr-3 drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                 <span class="text-xl font-black uppercase tracking-widest">Profile</span>
                             </x-nav-link>

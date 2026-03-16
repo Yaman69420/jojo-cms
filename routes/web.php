@@ -30,8 +30,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/favorites/{type}/{id}', [UserPerkController::class, 'toggleFavorite'])->name('favorites.toggle');
     Route::post('/episodes/{episode}/watched', [UserPerkController::class, 'toggleWatched'])->name('episodes.toggle-watched');
 
-    // Profile / Sanctuary
-    Route::get('/sanctuary', [ProfileController::class, 'show'])->name('profile.show');
+    // Profile & Social
+    Route::get('/community', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/{user}/follow', [ProfileController::class, 'follow'])->name('profile.follow');
+    Route::post('/profile/{user}/unfollow', [ProfileController::class, 'unfollow'])->name('profile.unfollow');
+    Route::get('/sanctuary', fn() => redirect()->route('profile.show', Auth::user()))->name('sanctuary');
 });
 
 // Public Resource Routes

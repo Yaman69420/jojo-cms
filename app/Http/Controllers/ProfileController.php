@@ -2,20 +2,95 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    public function show()
+    /**
+     * Display a listing of users (Search).
+     */
+    public function index(Request $request)
     {
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $searchTerm = $request->get('search');
+            $query->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('email', 'like', "%{$searchTerm}%");
+        }
+
+        $users = $query->where('id', '!=', Auth::id())
+                       ->withCount(['followers'])
+                       ->paginate(12)
+                       ->withQueryString();
+
+        return view('profile.index', [
+            'users' => $users,
+            'searchTerm' => $request->get('search'),
+        ]);
+    }
+
+    /**
+     * Show the user's profile.
+     */
+    public function show(User $user)
+    {
+        $user->loadCount(['followers', 'following', 'watchedEpisodes', 'favorites', 'ratings']);
+        
+        return view('profile.show', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(Request $request)
+    {
+        /** @var User $user */
         $user = Auth::user();
 
-        // Load favorites with their respective models
-        $favorites = $user->favorites()->with('favoritable')->latest()->get();
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'avatar_url' => ['nullable', 'string'],
+        ]);
 
-        // Load watched episodes with parts
-        $watchedEpisodes = $user->watchedEpisodes()->with('part')->latest()->get();
+        $user->update($validated);
 
-        return view('profile.show', compact('user', 'favorites', 'watchedEpisodes'));
+        return back()->with('status', 'profile-updated');
+    }
+
+    /**
+     * Follow a user.
+     */
+    public function follow(User $user)
+    {
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+
+        if ($currentUser->id === $user->id) {
+            return back()->with('error', 'You cannot follow yourself.');
+        }
+
+        $currentUser->following()->syncWithoutDetaching([$user->id]);
+
+        return back()->with('status', 'followed');
+    }
+
+    /**
+     * Unfollow a user.
+     */
+    public function unfollow(User $user)
+    {
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+
+        $currentUser->following()->detach($user->id);
+
+        return back()->with('status', 'unfollowed');
     }
 }
