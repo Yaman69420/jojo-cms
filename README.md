@@ -1,60 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel">
+  
+  # 🌟 JOJO CMS: THE ULTIMATE FAN ARCHIVE 🌟
+  
+  [![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
+  [![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=for-the-badge&logo=php)](https://php.net)
+  [![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
+  [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  **A high-octane archive for JoJo's Bizarre Adventure fans, built with Laravel 12.**  
+  *Social features, Episode Tracking, and Premium JoJo Protagonist Avatars.*
+</div>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ KEY FEATURES
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🏗️ Complete Arc Inventory (Parts 1-7)
+Meticulously curated data for every JoJo arc, from **Phantom Blood** to a fully custom implementation of **Steel Ball Run**.
+- **Official Media**: Restored high-fidelity thumbnails and posters.
+- **Dynamic Updates**: Automatically tracks and displays the latest released episode on the home page.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 👤 Premium Social Sanctuary
+Your profile isn't just data—it's your JoJo identity.
+- **Identity Selection**: Choose from 8 custom-generated protagonist avatars (Jonathan to Gappy).
+- **Social Stats**: Track your Followers, Following, and Watch History.
+- **Fan Discovery**: Find other JoJo fans via the global **Community Search** and follow their journey.
 
-## Learning Laravel
+### 📺 Immersive Viewing Experience
+- **Episode Tracking**: Mark episodes as "Watched" and keep track of your progress.
+- **Favorites**: Build your personal collection of favorite parts and episodes.
+- **Rich Media**: Integrated official trailers and verified episode metadata.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🎨 DESIGN AESTHETICS
+The JoJo CMS uses a custom **Bizarre Brand Interface**:
+- **Palette**: Deep Purples, Vibrant Fuchsias, and Golden Yellows.
+- **Typography**: Uses 'Bangers' for high-impact JoJo-style headers.
+- **Interactions**: Skewed transforms, glassmorphism, and bold "DoDoDo" micro-animations.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 QUICK START
 
-### Premium Partners
+### Prerequisites
+- PHP 8.4+
+- MySQL
+- Composer & NPM
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Yaman69420/jojo-cms.git
+   cd jojo-cms
+   ```
 
-## Contributing
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install && npm run build
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Code of Conduct
+4. **Database & Content Seeding**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Storage Activation**
+   ```bash
+   php artisan storage:link
+   ```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🛡️ SECURITY & LICENSE
+This project is open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.  
+All JoJo's Bizarre Adventure assets are property of their respective creators (Hirohiko Araki / Lucky Land Communications / David Production).
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# jojo-cms
+<div align="center">
+  <sub>Built with ❤️ by Yaman & Antigravity</sub>
+</div>
