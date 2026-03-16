@@ -6,7 +6,7 @@
         <div class="relative z-10 flex flex-col lg:flex-row gap-12 items-center">
             <div class="flex-1 text-center lg:text-left">
                 <h2 class="text-7xl lg:text-9xl text-yellow-400 bangers transform -skew-x-6 drop-shadow-2xl leading-none mb-6 tracking-widest">
-                    THE CHRONICLES
+                    THE BIZARRE ADVENTURE
                 </h2>
                 <p class="text-2xl lg:text-3xl font-black text-fuchsia-300 uppercase tracking-widest mb-10 drop-shadow">
                     Explore the definitive history of the series.
