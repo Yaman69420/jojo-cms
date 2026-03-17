@@ -6,9 +6,11 @@
             <h2 class="text-4xl text-yellow-400 bangers transform -skew-x-6 drop-shadow-lg tracking-widest">Manage Episodes</h2>
             <p class="text-lg font-bold text-fuchsia-300 mt-1 uppercase tracking-wider">All episodes recorded in the system.</p>
         </div>
+        @can('admin')
         <div class="flex gap-4">
             <a href="{{ route('admin.episodes.create') }}" class="bg-yellow-400 text-purple-900 bangers text-2xl px-6 py-2 jojo-border jojo-shadow hover:bg-yellow-300 transform hover:-translate-y-1 transition-transform uppercase tracking-widest">Create Episode</a>
         </div>
+        @endcan
     </div>
 
     <!-- Filters -->
@@ -75,12 +77,14 @@
                     <x-table.td>
                         <div class="flex gap-2 justify-end">
                             <a href="{{ route('admin.episodes.show', $episode) }}" class="text-indigo-600 font-black uppercase tracking-widest hover:underline text-sm">VIEW</a>
+                            @can('admin')
                             <a href="{{ route('admin.episodes.edit', $episode) }}" class="text-yellow-600 font-black uppercase tracking-widest hover:underline text-sm">EDIT</a>
                             <form action="{{ route('admin.episodes.destroy', $episode) }}" method="POST" onsubmit="return confirm('Delete this episode?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 font-black uppercase tracking-widest hover:underline text-sm">DELETE</button>
                             </form>
+                            @endcan
                         </div>
                     </x-table.td>
                 </tr>

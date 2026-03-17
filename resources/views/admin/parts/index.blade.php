@@ -6,9 +6,11 @@
             <h2 class="text-4xl text-yellow-400 bangers transform -skew-x-6 drop-shadow-lg tracking-widest text-shadow-lg">Manage Parts</h2>
             <p class="text-lg font-bold text-fuchsia-300 mt-1 uppercase tracking-wider">Administrative control over the series parts.</p>
         </div>
+        @can('admin')
         <div class="flex gap-4">
             <a href="{{ route('admin.parts.create') }}" class="bg-yellow-400 text-purple-900 bangers text-2xl px-6 py-2 jojo-border jojo-shadow hover:bg-yellow-300 transform hover:-translate-y-1 transition-transform uppercase tracking-widest">Create Part</a>
         </div>
+        @endcan
     </div>
 
     <!-- Parts Grid (Matching Public Style) -->
@@ -32,12 +34,14 @@
                     
                     <div class="flex items-center justify-between pt-4 border-t-2 border-slate-100 gap-2">
                         <a href="{{ route('admin.parts.show', $part) }}" class="text-indigo-600 font-black uppercase tracking-widest hover:underline text-sm">VIEW</a>
+                        @can('admin')
                         <a href="{{ route('admin.parts.edit', $part) }}" class="text-yellow-600 font-black uppercase tracking-widest hover:underline text-sm">EDIT</a>
                         <form action="{{ route('admin.parts.destroy', $part) }}" method="POST" onsubmit="return confirm('Delete this part?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 font-black uppercase tracking-widest hover:underline text-sm">DELETE</button>
                         </form>
+                        @endcan
                     </div>
                 </div>
             </div>
