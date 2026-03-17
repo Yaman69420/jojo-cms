@@ -1,4 +1,4 @@
-# 🌟 JoJo's Bizarre Adventure Fan Project 🌟
+# JoJo's Bizarre Adventure Fan Project
 
 Hey! I'm just a huge JoJo fan and I wanted to build something fun to keep track of my favorite parts and episodes. This isn't anything super professional or "premium"—it's just a small personal project I've been working on because I love the series.
 
@@ -6,7 +6,7 @@ I've put in all the parts from **Phantom Blood** all the way to **Steel Ball Run
 
 ---
 
-### 🎨 What you can do here:
+### What you can do here:
 
 - **Follow the Story**: Browse through every part and episode.
 - **Track Progress**: Mark episodes as watched so you know where you're at.
