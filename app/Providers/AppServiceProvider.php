@@ -28,5 +28,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', function ($user) {
             return $user->is_admin === true;
         });
+
+        // Prevent Proxy Caching (School Network Fix)
+        \Illuminate\Support\Facades\View::composer('*', function ($view) {
+            header('Cache-Control: no-cache, private, no-store, must-revalidate');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+        });
     }
 }
