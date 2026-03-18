@@ -78,28 +78,92 @@ class User extends Authenticatable
     }
 
     /**
-     * Users that are following this user.
+     * Friendships that this user started.
      */
-    public function followers()
+    public function friendshipsSent()
     {
-        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'recipient_id')
+                    ->withPivot('status')
+                    ->withTimestamps();
     }
 
     /**
-     * Users that this user is following.
+     * Friendships that were sent to this user.
      */
-    public function following()
+    public function friendshipsReceived()
     {
-        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'friendships', 'recipient_id', 'sender_id')
+                    ->withPivot('status')
+                    ->withTimestamps();
     }
 
     /**
-     * Check if the user is following another user.
+     * Get all accepted friends.
      */
-    public function isFollowing(User $user)
+    public function friends()
     {
-        return $this->following()->where('following_id', $user->id)->exists();
+        $sent = $this->friendshipsSent()->wherePivot('status', 'accepted')->get();
+        $received = $this->friendshipsReceived()->wherePivot('status', 'accepted')->get();
+        
+        return $sent->merge($received);
     }
+
+    /**
+     * Check if the user is friends with another user.
+     */
+    public function isFriendsWith(User $user): bool
+    {
+        return $this->friendshipsSent()->wherePivot('status', 'accepted')->where('recipient_id', $user->id)->exists() ||
+               $this->friendshipsReceived()->wherePivot('status', 'accepted')->where('sender_id', $user->id)->exists();
+    }
+
+    /**
+     * Check if there's a pending request from this user to another.
+     */
+    public function hasSentRequestTo(User $user): bool
+    {
+        return $this->friendshipsSent()->wherePivot('status', 'pending')->where('recipient_id', $user->id)->exists();
+    }
+
+    /**
+     * Check if there's a pending request to this user from another.
+     */
+    public function hasPendingRequestFrom(User $user): bool
+    {
+        return $this->friendshipsReceived()->wherePivot('status', 'pending')->where('sender_id', $user->id)->exists();
+    }
+
+    /**
+     * Get all conversations this user is part of.
+     */
+    public function conversations()
+    {
+        return Conversation::where('user_one_id', $this->id)
+            ->orWhere('user_two_id', $this->id)
+            ->orderBy('last_message_at', 'desc');
+    }
+
+    /**
+     * Get or create a conversation between two users.
+     */
+    public function getConversationWith(User $otherUser): Conversation
+    {
+        $conversation = Conversation::where(function ($query) use ($otherUser) {
+            $query->where('user_one_id', $this->id)->where('user_two_id', $otherUser->id);
+        })->orWhere(function ($query) use ($otherUser) {
+            $query->where('user_one_id', $otherUser->id)->where('user_two_id', $this->id);
+        })->first();
+
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'user_one_id' => $this->id,
+                'user_two_id' => $otherUser->id,
+            ]);
+        }
+
+        return $conversation;
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

@@ -5,10 +5,12 @@ use App\Http\Controllers\Admin\PartController as AdminPartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserPerkController;
 use App\Http\Middleware\IsAdmin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -34,8 +36,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/community', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/{user}/follow', [ProfileController::class, 'follow'])->name('profile.follow');
-    Route::post('/profile/{user}/unfollow', [ProfileController::class, 'unfollow'])->name('profile.unfollow');
+    // Friendships
+    Route::get('/friend-requests', [FriendshipController::class, 'requests'])->name('friend-requests.index');
+    Route::post('/friendships/{user}/send', [FriendshipController::class, 'send'])->name('friendships.send');
+    Route::post('/friendships/{user}/accept', [FriendshipController::class, 'accept'])->name('friendships.accept');
+    Route::post('/friendships/{user}/reject', [FriendshipController::class, 'reject'])->name('friendships.reject');
+    Route::post('/friendships/{user}/unfriend', [FriendshipController::class, 'unfriend'])->name('friendships.unfriend');
+
+    // Chat
+    Route::get('/chat/{userId?}', function ($userId = null) {
+        return view('chat', ['userId' => $userId]);
+    })->name('chat');
     Route::get('/sanctuary', fn() => redirect()->route('profile.show', Auth::user()))->name('sanctuary');
 });
 

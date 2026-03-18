@@ -13,11 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'DIO',
-            'email' => 'dio@example.com',
-            'password' => Hash::make('password'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'dio@example.com'],
+            [
+                'name' => 'DIO',
+                'password' => Hash::make('password'),
+                'is_admin' => false,
+            ]
+        );
 
         $this->call(JoJoSeeder::class);
     }

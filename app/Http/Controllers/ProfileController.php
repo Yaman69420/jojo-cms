@@ -23,7 +23,6 @@ class ProfileController extends Controller
         }
 
         $users = $query->where('id', '!=', Auth::id())
-                       ->withCount(['followers'])
                        ->paginate(12)
                        ->withQueryString();
 
@@ -38,7 +37,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $user->loadCount(['followers', 'following', 'watchedEpisodes', 'favorites', 'ratings']);
+        $user->loadCount(['watchedEpisodes', 'favorites', 'ratings']);
         
         return view('profile.show', [
             'user' => $user,
@@ -62,35 +61,5 @@ class ProfileController extends Controller
         $user->update($validated);
 
         return back()->with('status', 'profile-updated');
-    }
-
-    /**
-     * Follow a user.
-     */
-    public function follow(User $user)
-    {
-        /** @var User $currentUser */
-        $currentUser = Auth::user();
-
-        if ($currentUser->id === $user->id) {
-            return back()->with('error', 'You cannot follow yourself.');
-        }
-
-        $currentUser->following()->syncWithoutDetaching([$user->id]);
-
-        return back()->with('status', 'followed');
-    }
-
-    /**
-     * Unfollow a user.
-     */
-    public function unfollow(User $user)
-    {
-        /** @var User $currentUser */
-        $currentUser = Auth::user();
-
-        $currentUser->following()->detach($user->id);
-
-        return back()->with('status', 'unfollowed');
     }
 }

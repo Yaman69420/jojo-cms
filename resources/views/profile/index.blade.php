@@ -30,7 +30,7 @@
                     </div>
                     <div class="flex-1 truncate">
                         <h3 class="text-2xl text-yellow-400 bangers truncate tracking-widest leading-none mb-1">{{ strtoupper($user->name) }}</h3>
-                        <span class="text-xs font-black text-fuchsia-400 uppercase tracking-widest">{{ $user->followers_count }} Followers</span>
+                        <span class="text-xs font-black text-fuchsia-400 uppercase tracking-widest">{{ $user->friends()->count() }} Friends</span>
                     </div>
                 </div>
                 
@@ -42,21 +42,34 @@
                             View Soul
                         </a>
                         
-                        @if(Auth::user()->isFollowing($user))
-                            <form action="{{ route('profile.unfollow', $user) }}" method="POST" class="flex-1">
-                                @csrf
-                                <button type="submit" class="w-full bg-slate-200 text-slate-600 bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-slate-300 transition-colors uppercase tracking-widest">
-                                    Unfollow
+                        @auth
+                            @if(Auth::user()->isFriendsWith($user))
+                                <form action="{{ route('friendships.unfriend', $user) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-slate-200 text-slate-600 bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-slate-300 transition-colors uppercase tracking-widest">
+                                        Unfriend
+                                    </button>
+                                </form>
+                            @elseif(Auth::user()->hasSentRequestTo($user))
+                                <button class="flex-1 bg-slate-700 text-yellow-400 bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] cursor-default uppercase tracking-widest">
+                                    Pending
                                 </button>
-                            </form>
-                        @else
-                            <form action="{{ route('profile.follow', $user) }}" method="POST" class="flex-1">
-                                @csrf
-                                <button type="submit" class="w-full bg-fuchsia-600 text-white bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-fuchsia-500 transition-colors uppercase tracking-widest">
-                                    Follow
-                                </button>
-                            </form>
-                        @endif
+                            @elseif(Auth::user()->hasPendingRequestFrom($user))
+                                <form action="{{ route('friendships.accept', $user) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-green-600 text-white bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-green-500 transition-colors uppercase tracking-widest">
+                                        Accept
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('friendships.send', $user) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-fuchsia-600 text-white bangers text-xl py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-fuchsia-500 transition-colors uppercase tracking-widest">
+                                        Add Friend
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>

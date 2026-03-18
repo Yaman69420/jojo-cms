@@ -25,31 +25,48 @@
             <div class="flex-1 text-center md:text-left relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end gap-4 mb-4">
                     <h2 class="text-6xl text-yellow-400 bangers transform -skew-x-6 tracking-widest drop-shadow-lg leading-none">{{ strtoupper($user->name) }}</h2>
-                    @if(Auth::id() !== $user->id)
-                        @if(Auth::user()->isFollowing($user))
-                            <form action="{{ route('profile.unfollow', $user) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="bg-slate-800 text-fuchsia-400 bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-slate-700 transition-colors uppercase">Unfollow</button>
-                            </form>
-                        @else
-                            <form action="{{ route('profile.follow', $user) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="bg-fuchsia-600 text-white bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-fuchsia-500 transition-colors uppercase">Follow</button>
-                            </form>
+                    @auth
+                        @if(Auth::id() !== $user->id)
+                            @if(Auth::user()->isFriendsWith($user))
+                                <div class="flex gap-2">
+                                    <a href="{{ route('chat', $user->id) }}" class="bg-indigo-600 text-white bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-indigo-500 transition-colors uppercase no-underline">Message</a>
+                                    <form action="{{ route('friendships.unfriend', $user) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="bg-slate-800 text-fuchsia-400 bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-slate-700 transition-colors uppercase">Unfriend</button>
+                                    </form>
+                                </div>
+                            @elseif(Auth::user()->hasSentRequestTo($user))
+                                <form action="{{ route('friendships.unfriend', $user) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="bg-slate-700 text-yellow-400 bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] cursor-default uppercase">Request Pending</button>
+                                </form>
+                            @elseif(Auth::user()->hasPendingRequestFrom($user))
+                                <div class="flex gap-2">
+                                    <form action="{{ route('friendships.accept', $user) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="bg-green-600 text-white bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-green-500 transition-colors uppercase">Accept</button>
+                                    </form>
+                                    <form action="{{ route('friendships.reject', $user) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="bg-red-600 text-white bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-red-500 transition-colors uppercase">Reject</button>
+                                    </form>
+                                </div>
+                            @else
+                                <form action="{{ route('friendships.send', $user) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="bg-fuchsia-600 text-white bangers text-xl px-6 py-2 jojo-border shadow-[2px_2px_0px_#111] hover:bg-fuchsia-500 transition-colors uppercase">Add Friend</button>
+                                </form>
+                            @endif
                         @endif
-                    @endif
+                    @endauth
                 </div>
                 
                 <p class="text-xl font-bold text-fuchsia-300 uppercase tracking-widest mb-6">{{ $user->email }}</p>
                 
                 <div class="flex flex-wrap justify-center md:justify-start gap-4">
                     <div class="bg-white/10 px-6 py-3 jojo-border backdrop-blur-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
-                        <span class="block text-3xl font-black text-white bangers leading-none">{{ $user->followers_count }}</span>
-                        <span class="text-xs font-black text-fuchsia-400 uppercase tracking-widest">Followers</span>
-                    </div>
-                    <div class="bg-white/10 px-6 py-3 jojo-border backdrop-blur-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
-                        <span class="block text-3xl font-black text-white bangers leading-none">{{ $user->following_count }}</span>
-                        <span class="text-xs font-black text-fuchsia-400 uppercase tracking-widest">Following</span>
+                        <span class="block text-3xl font-black text-white bangers leading-none">{{ $user->friends()->count() }}</span>
+                        <span class="text-xs font-black text-fuchsia-400 uppercase tracking-widest">Friends</span>
                     </div>
                     <div class="bg-white/10 px-6 py-3 jojo-border backdrop-blur-sm shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
                         <span class="block text-3xl font-black text-white bangers leading-none">{{ $user->watched_episodes_count }}</span>
@@ -173,6 +190,30 @@
                     </div>
                 @endforelse
             </div>
+        </div>
+    </div>
+
+    <!-- Friends List -->
+    <div class="relative z-10 mb-20">
+        <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-indigo-600 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">FRIENDS</h3>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            @forelse($user->friends() as $friend)
+                <a href="{{ route('profile.show', $friend) }}" class="bg-white p-4 jojo-border jojo-shadow flex flex-col items-center group hover:bg-yellow-50 transition-all hover:-translate-y-1 no-underline">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center border-2 border-slate-900 overflow-hidden mb-3">
+                        @if($friend->avatar_url)
+                            <img src="{{ asset('storage/' . $friend->avatar_url) }}" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-2xl bangers text-purple-900">{{ substr($friend->name, 0, 1) }}</span>
+                        @endif
+                    </div>
+                    <span class="text-lg bangers text-purple-900 text-center truncate w-full uppercase tracking-widest">{{ $friend->name }}</span>
+                </a>
+            @empty
+                <div class="col-span-full bg-purple-900/50 p-10 jojo-border text-center">
+                    <p class="font-bold text-white uppercase tracking-widest">No friends yet.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </x-layout>
