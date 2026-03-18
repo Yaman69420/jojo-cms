@@ -100,7 +100,7 @@
                         </p>
                         
                         <div class="flex gap-4 max-w-sm" x-data="{ 
-                            targetDate: new Date('March 19, 2026 00:00:00').getTime(),
+                            targetDate: new Date('March 19, 2026 05:00:00').getTime(),
                             days: 0,
                             hours: 0,
                             update() {
@@ -109,7 +109,7 @@
                                 this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
                                 this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                             }
-                        }" x-init="update(); setInterval(() => update(), 3600000)">
+                        }" x-init="update(); setInterval(() => update(), 1000)">
                             <div class="bg-white p-4 jojo-border text-center flex-1 shadow-[2px_2px_0px_#111]">
                                 <span class="block text-4xl bangers text-purple-900 leading-none" x-text="days">0</span>
                                 <span class="block text-xs font-black text-slate-400 uppercase mt-1">DAYS TO GO</span>

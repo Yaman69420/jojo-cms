@@ -24,7 +24,12 @@ Homestead.yaml
 Thumbs.db
 
 # Project Specific
+jojo_cms
+*.sqlite
 database/*.sqlite
+database/*.sqlite-journal
+database/*.sqlite-shm
+database/*.sqlite-wal
 /jojo-cms-backup
 /jojo_cms_dump.sql
 /*.sql

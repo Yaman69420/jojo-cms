@@ -6,6 +6,7 @@
     <title>{{ $title ?? 'JoJo CMS' }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Bangers&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     <style>
         body { 
             font-family: 'Oswald', sans-serif; 
@@ -233,5 +234,6 @@
             </main>
         </div>
     </div>
+    @livewireScripts
 </body>
 </html>
