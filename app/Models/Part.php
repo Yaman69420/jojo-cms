@@ -17,6 +17,14 @@ class Part extends Model
     /** @use HasFactory<PartFactory> */
     use HasFactory, SoftDeletes;
 
+    /**
+     * Cast key to string for Postgres VARCHAR morph compatibility.
+     */
+    public function getKeyForMorphQuery(): string
+    {
+        return (string) $this->getKey();
+    }
+
     protected $fillable = [
         'title',
         'number',

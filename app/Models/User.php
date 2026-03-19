@@ -17,6 +17,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable, SoftDeletes;
 
     /**
+     * Cast key to string for Postgres VARCHAR morph compatibility.
+     */
+    public function getKeyForMorphQuery(): string
+    {
+        return (string) $this->getKey();
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

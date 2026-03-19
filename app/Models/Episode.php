@@ -19,6 +19,14 @@ class Episode extends Model
     /** @use HasFactory<EpisodeFactory> */
     use HasFactory, SoftDeletes;
 
+    /**
+     * Cast key to string for Postgres VARCHAR morph compatibility.
+     */
+    public function getKeyForMorphQuery(): string
+    {
+        return (string) $this->getKey();
+    }
+
     protected $fillable = [
         'part_id',
         'title',
