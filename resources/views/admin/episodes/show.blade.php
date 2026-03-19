@@ -8,8 +8,8 @@
         <div class="flex flex-col md:flex-row gap-12 items-start">
             <div class="w-full md:w-1/3">
                 <div class="bg-white p-4 jojo-border jojo-shadow transform rotate-1">
-                    @if($episode->media->first())
-                        <img src="{{ asset('storage/' . $episode->media->first()->path) }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                    @if($episode->thumbnail)
+                        <img src="{{ $episode->thumbnail }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                     @else
                         <div class="h-64 bg-purple-900 flex items-center justify-center text-6xl font-black text-yellow-400 opacity-20 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                             #{{ $episode->episode_number }}

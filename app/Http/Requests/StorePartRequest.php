@@ -19,8 +19,7 @@ class StorePartRequest extends FormRequest
             'release_year' => ['required', 'integer', 'min:1900', 'max:2100'],
             'summary' => ['nullable', 'string'],
             'trailer_url' => ['nullable', 'url', 'max:255'],
-            'media' => ['nullable', 'array'],
-            'media.*' => ['image', 'max:2048'],
+            'image' => ['nullable', 'image', 'max:20480'],
         ];
     }
 }

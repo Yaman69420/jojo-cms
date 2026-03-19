@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePartRequest;
 use App\Models\Part;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PartController extends Controller
 {
@@ -33,11 +34,9 @@ class PartController extends Controller
     {
         $part = Part::create($request->validated());
 
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $mediaData = $this->imageService->compressAndStore($file, 'media');
-                $part->media()->create($mediaData);
-            }
+        if ($request->hasFile('image')) {
+            $mediaData = $this->imageService->compressAndStore($request->file('image'), 'parts');
+            $part->media()->create($mediaData);
         }
 
         return redirect()->route('admin.parts.index')->with('success', 'Part created successfully.');
@@ -59,11 +58,14 @@ class PartController extends Controller
     {
         $part->update($request->validated());
 
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $mediaData = $this->imageService->compressAndStore($file, 'media');
-                $part->media()->create($mediaData);
+        if ($request->hasFile('image')) {
+            foreach ($part->media as $media) {
+                Storage::disk('public')->delete($media->path);
+                $media->delete();
             }
+
+            $mediaData = $this->imageService->compressAndStore($request->file('image'), 'parts');
+            $part->media()->create($mediaData);
         }
 
         return redirect()->route('admin.parts.index')->with('success', 'Part updated successfully.');

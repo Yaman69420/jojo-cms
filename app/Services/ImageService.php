@@ -87,13 +87,17 @@ class ImageService
             Log::error('Image Compression Error: '.$e->getMessage());
 
             // Fallback to normal storage if compression fails
+            $originalName = $file->getClientOriginalName();
+            $mimeType = $file->getMimeType();
+            $size = $file->getSize();
+
             $path = $file->store($directory, 'public');
 
             return [
                 'path' => $path,
-                'original_name' => $file->getClientOriginalName(),
-                'mime_type' => $file->getMimeType(),
-                'size' => $file->getSize(),
+                'original_name' => $originalName,
+                'mime_type' => $mimeType,
+                'size' => $size,
             ];
         }
     }
