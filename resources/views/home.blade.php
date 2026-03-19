@@ -78,57 +78,52 @@
         <div class="lg:col-span-2">
             <h3 class="text-4xl text-yellow-400 bangers transform -skew-x-6 mb-8 tracking-widest bg-fuchsia-600 inline-block px-6 py-2 jojo-border shadow-[4px_4px_0px_#111]">BREAKING NEWS: PART 7 ARRIVES!</h3>
             
+            @if($featuredPart)
             <div class="relative bg-white text-purple-900 jojo-border jojo-shadow overflow-hidden group flex flex-col md:flex-row min-h-[500px]">
                 <!-- Poster Side -->
                 <div class="w-full md:w-72 bg-purple-800 relative border-b-4 md:border-b-0 md:border-r-4 border-slate-900 overflow-hidden">
-                    <img src="{{ asset('storage/posters/sbr_poster.png') }}" 
-                         onerror="this.style.display='none'"
-                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
-                    <div class="absolute top-4 left-4 z-20">
-                        <span class="inline-block bg-yellow-400 text-purple-900 bangers text-xl px-4 py-1 jojo-border animate-bounce">COMING THIS WEEK</span>
+                    <a href="{{ route('parts.show', $featuredPart) }}" class="block w-full h-full">
+                        <img src="{{ $featuredPart->poster }}" 
+                             alt="{{ $featuredPart->title }} Poster"
+                             class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                    </a>
+                    <div class="absolute top-4 left-4 z-20 pointer-events-none">
+                        <span class="inline-flex items-center gap-2 bg-green-500 text-white bangers text-xl px-4 py-1 jojo-border shadow-[3px_3px_0px_#111]">
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                            </span>
+                            NOW STREAMING
+                        </span>
                     </div>
                 </div>
                 
                 <!-- Info Side -->
                 <div class="flex-1 flex flex-col">
-                    <div class="p-8 bg-gradient-to-br from-white to-purple-50 flex-1">
-                        <h4 class="text-7xl text-purple-900 bangers uppercase tracking-tighter leading-none mb-2">STEEL BALL RUN</h4>
-                        <p class="text-fuchsia-600 font-bold text-xl uppercase tracking-widest mb-6">The race of a lifetime begins.</p>
+                    <div class="p-8 bg-gradient-to-br from-white to-purple-50 flex-1 relative">
+                        <h4 class="text-7xl text-purple-900 bangers uppercase tracking-tighter leading-none mb-2 relative z-10">{{ $featuredPart->title ?? 'STEEL BALL RUN' }}</h4>
+                        <p class="text-fuchsia-600 font-bold text-xl uppercase tracking-widest mb-6 relative z-10">The race of a lifetime has begun.</p>
                         
-                        <p class="text-slate-700 font-bold leading-relaxed mb-10">
-                            Prepare yourself for the most ambitious Part yet. Join Johnny Joestar and Gyro Zeppeli as they race across the American frontier in a 6,000km quest for glory and the ultimate prize.
+                        <p class="text-slate-700 font-bold leading-relaxed mb-8 relative z-10">
+                            {{ $featuredPart->summary ?? 'The most ambitious Part yet is here. Join Johnny Joestar and Gyro Zeppeli as they race across the American frontier in a 6,000km quest for glory and the ultimate prize.' }}
                         </p>
                         
-                        <div class="flex gap-4 max-w-sm" x-data="{ 
-                            targetDate: new Date('March 19, 2026 05:00:00').getTime(),
-                            days: 0,
-                            hours: 0,
-                            update() {
-                                const now = new Date().getTime();
-                                const distance = this.targetDate - now;
-                                this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                                this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            }
-                        }" x-init="update(); setInterval(() => update(), 1000)">
-                            <div class="bg-white p-4 jojo-border text-center flex-1 shadow-[2px_2px_0px_#111]">
-                                <span class="block text-4xl bangers text-purple-900 leading-none" x-text="days">0</span>
-                                <span class="block text-xs font-black text-slate-400 uppercase mt-1">DAYS TO GO</span>
-                            </div>
-                            <div class="bg-white p-4 jojo-border text-center flex-1 shadow-[2px_2px_0px_#111]">
-                                <span class="block text-4xl bangers text-purple-900 leading-none" x-text="hours">0</span>
-                                <span class="block text-xs font-black text-slate-400 uppercase mt-1">HOURS</span>
-                            </div>
+                        <div class="mt-8">
+                            <span class="inline-block bg-red-600 text-white bangers text-2xl px-8 py-4 jojo-border shadow-[4px_4px_0px_#111] uppercase tracking-widest">
+                                WATCH THE NEW SEASON NOW ON NETFLIX!
+                            </span>
                         </div>
                     </div>
                     
                     <div class="p-6 bg-slate-900 flex items-center justify-between">
-                        <span class="hidden md:inline-block text-fuchsia-400 font-black uppercase tracking-widest text-sm">March 19th Premiere</span>
+                        <span class="hidden md:inline-block text-fuchsia-400 font-black uppercase tracking-widest text-sm">Premiering Now</span>
                         <a href="https://www.youtube.com/watch?v=b51C8AbRDGU" target="_blank" class="bg-yellow-400 text-purple-900 bangers text-3xl px-10 py-4 jojo-border jojo-shadow hover:bg-yellow-300 transition-colors uppercase tracking-widest transform hover:-rotate-1 no-underline">
                             WATCH TRAILER
                         </a>
                     </div>
                 </div>
             </div>
+            @endif
         </div>
 
         <!-- Latest Episode -->
@@ -139,16 +134,21 @@
             <div class="bg-white p-6 jojo-border jojo-shadow">
                 <div class="mb-6 jojo-border aspect-video bg-purple-900 overflow-hidden relative">
                     @if($latestEpisode->thumbnail)
-                        <img src="{{ $latestEpisode->thumbnail }}" class="w-full h-full object-cover">
+                        <a href="{{ route('episodes.show', $latestEpisode) }}" class="block w-full h-full">
+                            <img src="{{ $latestEpisode->thumbnail }}" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </a>
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-8xl bangers text-yellow-400 opacity-20">EP{{ $latestEpisode->episode_number }}</div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-20">
+                            <span class="text-9xl">★</span>
+                        </div>
                     @endif
                     <div class="absolute top-4 left-4 bg-yellow-400 text-purple-900 bangers text-2xl px-4 py-2 jojo-border">
                         EP #{{ $latestEpisode->episode_number }}
                     </div>
                 </div>
                 <div class="mb-2">
-                    <span class="text-xs font-black text-fuchsia-600 uppercase tracking-widest">PART {{ $latestEpisode->part->number }}: {{ $latestEpisode->part->title }}</span>
+                    <a href="{{ route('parts.show', $latestEpisode->part) }}" class="inline-block text-xs font-black text-fuchsia-600 uppercase tracking-widest hover:text-fuchsia-500 hover:underline">PART {{ $latestEpisode->part->number }}: {{ $latestEpisode->part->title }}</a>
                 </div>
                 <h4 class="text-4xl bangers text-purple-900 uppercase tracking-widest mb-4 leading-tight">{{ $latestEpisode->title }}</h4>
                 <p class="text-slate-600 font-bold mb-8 leading-relaxed">

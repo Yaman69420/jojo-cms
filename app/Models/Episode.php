@@ -46,6 +46,15 @@ class Episode extends Model
             get: function (?string $value) {
                 $url = $this->thumbnail_url;
                 if (! $url) {
+                    try {
+                        $media = $this->media()->first();
+                        if ($media) {
+                            return asset('storage/'.$media->path);
+                        }
+                    } catch (\Exception $e) {
+                        // Silently fail for morph query issues
+                    }
+
                     return null;
                 }
                 if (str_starts_with($url, 'http')) {

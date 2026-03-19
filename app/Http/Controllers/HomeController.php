@@ -43,6 +43,8 @@ class HomeController extends Controller
             ];
         }
 
-        return view('home', compact('stats', 'latestEpisode', 'topEpisodes', 'userActivity'));
+        $featuredPart = Part::where('number', 7)->first();
+
+        return view('home', compact('stats', 'latestEpisode', 'topEpisodes', 'userActivity', 'featuredPart'));
     }
 }

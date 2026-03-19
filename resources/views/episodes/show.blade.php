@@ -9,7 +9,9 @@
             <div class="w-full md:w-1/3">
                 <div class="bg-white p-4 jojo-border jojo-shadow transform rotate-1">
                     @if($episode->thumbnail)
-                        <img src="{{ $episode->thumbnail }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                        <img src="{{ $episode->thumbnail }}" 
+                             @click.prevent="openModal('{{ $episode->thumbnail }}', '{{ addslashes($episode->title) }} THUMBNAIL')"
+                             class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111] cursor-pointer hover:scale-[1.02] transition-transform">
                     @else
                         <div class="h-64 bg-purple-900 flex items-center justify-center text-6xl font-black text-yellow-400 opacity-20 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                             #{{ $episode->episode_number }}
@@ -69,9 +71,9 @@
             </div>
 
             <div class="flex-1">
-                <div class="inline-block bg-purple-900 text-yellow-400 font-black px-4 py-1 border-2 border-slate-900 mb-4 uppercase tracking-widest shadow-[2px_2px_0px_#111]">
+                <a href="{{ route('parts.show', $episode->part) }}" class="inline-block bg-purple-900 text-yellow-400 font-black px-4 py-1 border-2 border-slate-900 mb-4 uppercase tracking-widest shadow-[2px_2px_0px_#111] hover:bg-purple-800 transition-colors">
                     PART {{ $episode->part->number }}: {{ strtoupper($episode->part->title) }}
-                </div>
+                </a>
                 <h2 class="text-7xl text-white bangers transform -skew-x-6 drop-shadow-xl tracking-widest leading-none mb-8">#{{ $episode->episode_number }}: {{ strtoupper($episode->title) }}</h2>
                 
                 <div class="relative">

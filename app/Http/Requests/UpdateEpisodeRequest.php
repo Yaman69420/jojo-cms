@@ -20,8 +20,7 @@ class UpdateEpisodeRequest extends FormRequest
             'release_date' => ['sometimes', 'date'],
             'imdb_score' => ['nullable', 'numeric', 'min:0', 'max:10'],
             'summary' => ['nullable', 'string'],
-            'media' => ['nullable', 'array'],
-            'media.*' => ['image', 'max:2048'],
+            'image' => ['nullable', 'image', 'max:20480'],
         ];
     }
 }

@@ -59,3 +59,46 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', IsAdmin::class])->gr
     Route::resource('parts', AdminPartController::class);
     Route::resource('episodes', AdminEpisodeController::class);
 });
+
+// Temporary Debug Route — REMOVE AFTER DEBUGGING
+Route::get('/debug-railway', function () {
+    $results = [];
+
+    // 1. PHP Extensions
+    $results['php_version'] = PHP_VERSION;
+    $results['gd_loaded'] = extension_loaded('gd') ? '✅ YES' : '❌ NO';
+    $results['imagick_loaded'] = extension_loaded('imagick') ? '✅ YES' : '❌ NO';
+    $results['memory_limit'] = ini_get('memory_limit');
+
+    // 2. Database
+    try {
+        $results['db_driver'] = \DB::getDriverName();
+        $results['media_count'] = \DB::table('media')->count();
+        $results['media_columns'] = implode(', ', \Schema::getColumnListing('media'));
+    } catch (\Exception $e) {
+        $results['db_error'] = $e->getMessage();
+    }
+
+    // 3. Test morph query (the one that crashes)
+    try {
+        $episode = \App\Models\Episode::first();
+        if ($episode) {
+            $media = $episode->media()->get();
+            $results['morph_query'] = '✅ OK — returned '.$media->count().' results';
+        } else {
+            $results['morph_query'] = '⚠️ No episodes found';
+        }
+    } catch (\Exception $e) {
+        $results['morph_query'] = '❌ FAILED: '.$e->getMessage();
+    }
+
+    // 4. Storage
+    try {
+        $results['storage_writable'] = is_writable(storage_path()) ? '✅ YES' : '❌ NO';
+        $results['public_storage_link'] = file_exists(public_path('storage')) ? '✅ YES' : '❌ NO';
+    } catch (\Exception $e) {
+        $results['storage_error'] = $e->getMessage();
+    }
+
+    return response()->json($results, 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+})->middleware(['auth', IsAdmin::class]);

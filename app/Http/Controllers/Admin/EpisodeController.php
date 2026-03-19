@@ -9,6 +9,7 @@ use App\Models\Episode;
 use App\Models\Part;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EpisodeController extends Controller
 {
@@ -21,6 +22,8 @@ class EpisodeController extends Controller
             ->withAvg('ratings as ratings_avg_rating', 'rating')
             ->filter($request->only(['search', 'part_id']))
             ->orderBy('release_date', 'desc')
+            ->orderBy('part_id', 'desc')
+            ->orderBy('episode_number', 'desc')
             ->paginate(15)
             ->withQueryString();
 
@@ -40,11 +43,9 @@ class EpisodeController extends Controller
     {
         $episode = Episode::create($request->validated());
 
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $mediaData = $this->imageService->compressAndStore($file, 'media');
-                $episode->media()->create($mediaData);
-            }
+        if ($request->hasFile('image')) {
+            $mediaData = $this->imageService->compressAndStore($request->file('image'), 'episodes');
+            $episode->media()->create($mediaData);
         }
 
         return redirect()->route('admin.episodes.index')->with('success', 'Episode saved successfully.');
@@ -68,11 +69,14 @@ class EpisodeController extends Controller
     {
         $episode->update($request->validated());
 
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $mediaData = $this->imageService->compressAndStore($file, 'media');
-                $episode->media()->create($mediaData);
+        if ($request->hasFile('image')) {
+            foreach ($episode->media as $media) {
+                Storage::disk('public')->delete($media->path);
+                $media->delete();
             }
+
+            $mediaData = $this->imageService->compressAndStore($request->file('image'), 'episodes');
+            $episode->media()->create($mediaData);
         }
 
         return redirect()->route('admin.episodes.index')->with('success', 'Episode details have evolved!');

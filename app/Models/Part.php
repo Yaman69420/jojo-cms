@@ -44,9 +44,13 @@ class Part extends Model
                 $url = $this->poster_path;
                 if (! $url) {
                     // Fallback to Media model if exists
-                    $media = $this->media()->first();
-                    if ($media) {
-                        return asset('storage/'.$media->path);
+                    try {
+                        $media = $this->media()->first();
+                        if ($media) {
+                            return asset('storage/'.$media->path);
+                        }
+                    } catch (\Exception $e) {
+                        // Silently fail — media morph query may crash on Postgres
                     }
 
                     return null;

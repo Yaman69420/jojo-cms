@@ -450,7 +450,7 @@ new class extends Component {
                                    wire:model="newMessageBody"
                                    @input="Echo.private(`chat.${active}`).whisper('typing', { name: @js(auth()->user()->name) })"
                                    placeholder="Type message..."
-                                   class="w-full bg-slate-100 border-2 border-slate-900 p-2 text-xs font-bold text-purple-900 focus:outline-none focus:bg-yellow-50 transition-colors uppercase tracking-widest @error('messageMedia') border-red-600 @enderror @error('newMessageBody') border-red-600 @enderror">
+                                   class="w-full bg-slate-100 border-2 border-slate-900 p-2 text-xs font-bold text-purple-900 focus:outline-none focus:bg-yellow-50 transition-colors tracking-widest @error('messageMedia') border-red-600 @enderror @error('newMessageBody') border-red-600 @enderror">
                             @error('messageMedia')
                                 <span class="text-[8px] text-red-600 font-black uppercase mt-1 block">{{ $message }}</span>
                             @enderror

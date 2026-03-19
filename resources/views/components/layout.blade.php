@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ sidebarOpen: false }">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" 
+      x-data="{ 
+          sidebarOpen: false, 
+          showModal: false, 
+          modalImage: '', 
+          modalTitle: '', 
+          openModal(url, title) { 
+              this.modalImage = url; 
+              this.modalTitle = title; 
+              this.showModal = true; 
+          } 
+      }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +42,30 @@
     </style>
 </head>
 <body class="min-h-screen text-slate-100 selection:bg-fuchsia-500 selection:text-white overflow-hidden">
+    <!-- Global Image Modal -->
+    <div x-show="showModal" 
+         x-transition.opacity
+         class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm"
+         x-cloak
+         @keydown.escape.window="showModal = false">
+        <div class="relative max-w-5xl w-full bg-white jojo-border jojo-shadow-lg" @click.away="showModal = false">
+            <div class="p-4 border-b-4 border-slate-900 flex justify-between items-center bg-purple-900 text-yellow-400">
+                <h3 class="text-2xl bangers uppercase tracking-widest truncate mr-8" x-text="modalTitle"></h3>
+                <div class="flex gap-4">
+                    <a :href="modalImage" :download="modalTitle" class="bg-yellow-400 text-purple-900 bangers text-xl px-4 py-1 jojo-border hover:bg-yellow-300 transition-colors">
+                        DOWNLOAD
+                    </a>
+                    <button @click="showModal = false" class="text-white hover:text-red-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-2 bg-slate-200">
+                <img :src="modalImage" class="max-w-full max-h-[70vh] mx-auto object-contain">
+            </div>
+        </div>
+    </div>
+
     <div class="flex h-screen overflow-hidden relative">
         
         <!-- Mobile Sidebar Overlay -->

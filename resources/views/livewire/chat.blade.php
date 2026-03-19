@@ -254,7 +254,7 @@
                         <input type="text" wire:model="newMessageBody"
                                @input="Echo.private(`chat.${@js($activeConversationId)}`).whisper('typing', { name: @js(auth()->user()->name) })"
                                placeholder="Type a message..."
-                               class="w-full bg-slate-100 border-4 border-slate-900 p-3 font-bold text-purple-900 focus:outline-none focus:bg-yellow-50 transition-colors uppercase tracking-widest @error('newMessageBody') border-red-600 @enderror @error('messageMedia') border-red-600 @enderror">                        @error('newMessageBody')
+                               class="w-full bg-slate-100 border-4 border-slate-900 p-3 font-bold text-purple-900 focus:outline-none focus:bg-yellow-50 transition-colors tracking-widest @error('newMessageBody') border-red-600 @enderror @error('messageMedia') border-red-600 @enderror">                        @error('newMessageBody')
                             <span class="text-[10px] text-red-600 font-black uppercase mt-1">{{ $message }}</span>
                         @enderror
                         @error('messageMedia')

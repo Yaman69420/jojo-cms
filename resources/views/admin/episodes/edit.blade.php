@@ -15,7 +15,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="space-y-6">
-                    <x-form.select name="part_id" label="Part" :options="$parts" :value="$episode->part_id" />
+                    <x-form.select name="part_id" label="Part" :options="$parts" :value="$episode->part_id" display="title" />
                     <x-form.input name="title" label="Title" :value="$episode->title" />
                     <x-form.input name="episode_number" label="Episode Number" type="number" :value="$episode->episode_number" />
                     <x-form.input name="release_date" label="Air Date" type="date" :value="$episode->release_date" />

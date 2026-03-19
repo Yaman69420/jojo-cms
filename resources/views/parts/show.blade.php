@@ -9,7 +9,9 @@
             <div class="w-full md:w-1/3">
                 <div class="bg-white p-4 jojo-border jojo-shadow transform -rotate-1">
                     @if($part->poster)
-                        <img src="{{ $part->poster }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                        <img src="{{ $part->poster }}" 
+                             @click.prevent="openModal('{{ $part->poster }}', '{{ addslashes($part->title) }} POSTER')"
+                             class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111] cursor-pointer hover:scale-[1.02] transition-transform">
                     @else
                         <div class="h-64 bg-purple-900 flex items-center justify-center text-6xl font-black text-yellow-400 opacity-20 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                             PART {{ $part->number }}
@@ -65,7 +67,10 @@
             @forelse($part->episodes as $episode)
                 <div class="bg-white text-purple-900 jojo-border jojo-shadow p-6 flex flex-col md:flex-row items-center gap-6 hover:bg-yellow-50 transition-colors">
                     @if($episode->thumbnail)
-                        <img src="{{ $episode->thumbnail }}" class="w-32 h-20 object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                        <a href="{{ route('episodes.show', $episode) }}" class="block shrink-0">
+                            <img src="{{ $episode->thumbnail }}" 
+                                 class="w-32 h-20 object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111] hover:scale-105 transition-transform">
+                        </a>
                     @endif
                     <div class="bg-purple-900 text-yellow-400 bangers text-4xl px-6 py-2 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                         #{{ $episode->episode_number }}

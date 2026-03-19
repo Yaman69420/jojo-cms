@@ -25,10 +25,12 @@ class EpisodeController extends Controller
         }
 
         $episodes = Episode::query()
-            ->with(['part', 'media'])
+            ->with(['part'])
             ->withAvg('ratings as ratings_avg_rating', 'rating')
             ->filter($request->only(['search', 'part_id']))
             ->orderBy($sort, $direction)
+            ->orderBy('part_id', $direction)
+            ->orderBy('episode_number', $direction)
             ->paginate(15)
             ->withQueryString();
 
@@ -39,7 +41,7 @@ class EpisodeController extends Controller
 
     public function show(Episode $episode)
     {
-        $episode->load(['part', 'media']);
+        $episode->load(['part']);
 
         return view('episodes.show', compact('episode'));
     }

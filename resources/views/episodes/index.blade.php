@@ -45,7 +45,10 @@
                     <x-table.td>
                         <div class="flex items-center">
                             @if($episode->thumbnail)
-                                <img src="{{ $episode->thumbnail }}" class="w-24 h-14 object-cover border-2 border-slate-900 mr-4 shadow-[2px_2px_0px_#111]">
+                                <a href="{{ route('episodes.show', $episode) }}" class="block shrink-0 mr-4">
+                                    <img src="{{ $episode->thumbnail }}" 
+                                         class="w-24 h-14 object-cover border-2 border-slate-900 shadow-[2px_2px_0px_#111] hover:scale-105 transition-transform">
+                                </a>
                             @endif
                             <div class="bg-purple-900 text-yellow-400 font-black px-3 py-1 mr-4 border-2 border-slate-900 shadow-[2px_2px_0px_#111]">
                                 #{{ $episode->episode_number }}
@@ -57,7 +60,7 @@
                         </div>
                     </x-table.td>
                     <x-table.td>
-                        <span class="bg-fuchsia-100 text-fuchsia-800 font-black px-3 py-1 border-2 border-fuchsia-300 uppercase text-xs">PART {{ $episode->part->number }}</span>
+                        <a href="{{ route('parts.show', $episode->part) }}" class="inline-block bg-fuchsia-100 text-fuchsia-800 font-black px-3 py-1 border-2 border-fuchsia-300 uppercase text-xs hover:bg-fuchsia-200 transition-colors">PART {{ $episode->part->number }}</a>
                     </x-table.td>
                     <x-table.td>
                         <span class="font-bold text-slate-600 uppercase">{{ \Carbon\Carbon::parse($episode->release_date)->format('M j, Y') }}</span>

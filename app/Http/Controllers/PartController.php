@@ -10,7 +10,6 @@ class PartController extends Controller
     public function index(Request $request)
     {
         $parts = Part::query()
-            ->with(['media'])
             ->filter($request->only(['search']))
             ->orderBy('number')
             ->paginate(10)
@@ -21,7 +20,7 @@ class PartController extends Controller
 
     public function show(Part $part)
     {
-        $part->load(['episodes' => fn ($q) => $q->orderBy('episode_number'), 'media']);
+        $part->load(['episodes' => fn ($q) => $q->orderBy('episode_number')]);
 
         return view('parts.show', compact('part'));
     }
