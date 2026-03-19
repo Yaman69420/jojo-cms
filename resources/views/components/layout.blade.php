@@ -4,7 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'JoJo CMS' }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Bangers&display=swap" rel="stylesheet">
+
+    <!-- Fonts: Preconnect to speed up discovery -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=oswald:400,500,700|bangers:400" rel="stylesheet" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <style>
@@ -106,8 +110,11 @@
                         </x-nav-link>
 
                         <x-nav-link href="{{ route('chat') }}" :active="request()->routeIs('chat')" @click="sidebarOpen = false">
-                            <svg class="w-6 h-6 mr-3 drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                            <span class="text-xl uppercase tracking-wider">Messaging</span>
+                            <div class="relative flex items-center">
+                                <svg class="w-6 h-6 mr-3 drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                <span class="text-xl uppercase tracking-wider">Messaging</span>
+                                <livewire:chat-badge />
+                            </div>
                         </x-nav-link>
                     @endauth
 
@@ -214,7 +221,7 @@
                                     <span class="text-3xl text-yellow-400 bangers transform -skew-x-6">JOJO CMS</span>
                                 </div>
                                 <p class="text-slate-400 max-w-sm font-bold uppercase tracking-widest text-sm leading-relaxed">
-                                    The ultimate Sanctuary for JoJo fans. Explore the fated history of the Joestar bloodline.
+                                    The ultimate Community for JoJo fans. Explore the history of the Joestars.
                                 </p>
                             </div>
                         </div>
@@ -235,5 +242,8 @@
         </div>
     </div>
     @livewireScripts
+@auth
+    <livewire:chat-floating />
+@endauth
 </body>
 </html>

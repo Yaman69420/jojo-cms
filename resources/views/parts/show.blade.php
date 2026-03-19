@@ -8,10 +8,8 @@
         <div class="flex flex-col md:flex-row gap-8 items-start">
             <div class="w-full md:w-1/3">
                 <div class="bg-white p-4 jojo-border jojo-shadow transform -rotate-1">
-                    @if($part->poster_path)
-                        <img src="{{ asset('storage/' . $part->poster_path) }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
-                    @elseif($part->media->first())
-                        <img src="{{ asset('storage/' . $part->media->first()->path) }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                    @if($part->poster)
+                        <img src="{{ $part->poster }}" class="w-full object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                     @else
                         <div class="h-64 bg-purple-900 flex items-center justify-center text-6xl font-black text-yellow-400 opacity-20 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                             PART {{ $part->number }}
@@ -66,8 +64,8 @@
         <div class="space-y-6">
             @forelse($part->episodes as $episode)
                 <div class="bg-white text-purple-900 jojo-border jojo-shadow p-6 flex flex-col md:flex-row items-center gap-6 hover:bg-yellow-50 transition-colors">
-                    @if($episode->thumbnail_url)
-                        <img src="{{ $episode->thumbnail_url }}" class="w-32 h-20 object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
+                    @if($episode->thumbnail)
+                        <img src="{{ $episode->thumbnail }}" class="w-32 h-20 object-cover border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                     @endif
                     <div class="bg-purple-900 text-yellow-400 bangers text-4xl px-6 py-2 border-4 border-slate-900 shadow-[4px_4px_0px_#111]">
                         #{{ $episode->episode_number }}

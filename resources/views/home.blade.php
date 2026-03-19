@@ -138,10 +138,8 @@
             @if($latestEpisode)
             <div class="bg-white p-6 jojo-border jojo-shadow">
                 <div class="mb-6 jojo-border aspect-video bg-purple-900 overflow-hidden relative">
-                    @if($latestEpisode->thumbnail_url)
-                        <img src="{{ $latestEpisode->thumbnail_url }}" class="w-full h-full object-cover">
-                    @elseif($latestEpisode->media->first())
-                        <img src="{{ asset('storage/' . $latestEpisode->media->first()->path) }}" class="w-full h-full object-cover">
+                    @if($latestEpisode->thumbnail)
+                        <img src="{{ $latestEpisode->thumbnail }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-8xl bangers text-yellow-400 opacity-20">EP{{ $latestEpisode->episode_number }}</div>
                     @endif

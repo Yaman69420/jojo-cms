@@ -6,16 +6,26 @@ use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\ImageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Chat extends Component
 {
+    use WithFileUploads;
+
     public $activeConversationId;
+
     public $newMessageBody = '';
+
+    public $messageMedia;
+
     public $authId;
+
+    public $messageLimit = 20;
 
     public function mount($userId = null)
     {
@@ -28,8 +38,8 @@ class Chat extends Component
                 $this->activeConversationId = $conversation->id;
             }
         }
-        
-        if (!$this->activeConversationId) {
+
+        if (! $this->activeConversationId) {
             $firstConv = Auth::user()->conversations()->first();
             if ($firstConv) {
                 $this->activeConversationId = $firstConv->id;
@@ -44,8 +54,14 @@ class Chat extends Component
     public function selectConversation($id)
     {
         $this->activeConversationId = $id;
+        $this->messageLimit = 20;
         $this->markAsRead();
         $this->dispatch('scroll-to-bottom');
+    }
+
+    public function loadMore()
+    {
+        $this->messageLimit += 20;
     }
 
     protected function markAsRead()
@@ -55,6 +71,8 @@ class Chat extends Component
                 ->where('sender_id', '!=', Auth::id())
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
+
+            $this->dispatch('refreshCount')->to('chat-badge');
         }
     }
 
@@ -67,17 +85,27 @@ class Chat extends Component
         }
     }
 
-    public function sendMessage()
+    public function sendMessage(ImageService $imageService)
     {
-        Log::info('sendMessage called. Body: ' . $this->newMessageBody . ' Conv: ' . $this->activeConversationId);
+        ini_set('memory_limit', '512M');
+        Log::info('sendMessage called. Body: '.$this->newMessageBody.' Conv: '.$this->activeConversationId.' Media: '.($this->messageMedia ? 'yes' : 'no'));
 
         $this->validate([
-            'newMessageBody' => 'required|string|max:5000',
+            'newMessageBody' => 'nullable|string|max:5000',
+            'messageMedia' => 'nullable|file|image|max:20480', // 20MB max
+        ], [
+            'messageMedia.max' => 'The image is too large (max 20MB).',
+            'messageMedia.image' => 'The upload must be an image.',
         ]);
 
-        if (!$this->activeConversationId) {
+        if (! $this->newMessageBody && ! $this->messageMedia) {
+            return;
+        }
+
+        if (! $this->activeConversationId) {
             Log::warning('sendMessage failed: No active conversation.');
             session()->flash('error', 'No active conversation selected.');
+
             return;
         }
 
@@ -86,10 +114,17 @@ class Chat extends Component
                 'conversation_id' => $this->activeConversationId,
                 'sender_id' => Auth::id(),
                 'body' => $this->newMessageBody,
-                'type' => 'text',
+                'type' => $this->messageMedia ? 'media' : 'text',
             ]);
 
-            Log::info('Message created: ' . $message->id);
+            if ($this->messageMedia) {
+                $mediaData = $imageService->compressAndStore($this->messageMedia, 'chat_media');
+                $message->media()->create($mediaData);
+
+                $this->reset('messageMedia');
+            }
+
+            Log::info('Message created: '.$message->id);
 
             Conversation::where('id', $this->activeConversationId)->update(['last_message_at' => now()]);
 
@@ -97,33 +132,49 @@ class Chat extends Component
 
             // Broadcasting is optional — don't let it break sending
             try {
-                broadcast(new MessageSent($message))->toOthers();
+                broadcast(new MessageSent($message->load('media')))->toOthers();
             } catch (\Exception $e) {
-                Log::warning('Broadcast failed (non-critical): ' . $e->getMessage());
+                Log::warning('Broadcast failed (non-critical): '.$e->getMessage());
             }
 
             $this->dispatch('scroll-to-bottom');
-        } catch (\Exception $e) {
-            Log::error('Chat Error: ' . $e->getMessage());
-            session()->flash('error', 'Failed to send message: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            Log::error('Chat Error: '.$e->getMessage());
+            session()->flash('error', 'Failed to send message: '.$e->getMessage());
         }
+    }
+
+    public function clearMedia()
+    {
+        $this->reset('messageMedia');
     }
 
     public function render()
     {
         // Always fetch fresh data (no computed property caching)
-        $conversations = Auth::user()->conversations()->with(['userOne', 'userTwo'])->get();
+        $conversations = Auth::user()->conversations()->with(['userOne', 'userTwo', 'messages' => function ($q) {
+            $q->latest()->limit(1);
+        }])->get();
 
         $activeConversation = null;
+        $messages = collect();
+
         if ($this->activeConversationId) {
-            $activeConversation = Conversation::with(['messages.sender', 'userOne', 'userTwo'])
+            $activeConversation = Conversation::with(['userOne', 'userTwo'])
                 ->find($this->activeConversationId);
+
+            $messages = $activeConversation->messages()
+                ->with(['sender', 'media'])
+                ->latest()
+                ->limit($this->messageLimit)
+                ->get()
+                ->reverse();
         }
 
         return view('livewire.chat', [
             'conversations' => $conversations,
             'activeConversation' => $activeConversation,
+            'messages' => $messages,
         ]);
     }
 }
-

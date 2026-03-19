@@ -44,8 +44,8 @@
                 <tr class="border-t-4 border-slate-900 hover:bg-yellow-100 transition-colors group">
                     <x-table.td>
                         <div class="flex items-center">
-                            @if($episode->thumbnail_url)
-                                <img src="{{ $episode->thumbnail_url }}" class="w-24 h-14 object-cover border-2 border-slate-900 mr-4 shadow-[2px_2px_0px_#111]">
+                            @if($episode->thumbnail)
+                                <img src="{{ $episode->thumbnail }}" class="w-24 h-14 object-cover border-2 border-slate-900 mr-4 shadow-[2px_2px_0px_#111]">
                             @endif
                             <div class="bg-purple-900 text-yellow-400 font-black px-3 py-1 mr-4 border-2 border-slate-900 shadow-[2px_2px_0px_#111]">
                                 #{{ $episode->episode_number }}

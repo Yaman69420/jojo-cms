@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePartRequest;
 use App\Http\Requests\UpdatePartRequest;
 use App\Models\Part;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 
 class PartController extends Controller
 {
+    public function __construct(protected ImageService $imageService) {}
+
     public function index(Request $request)
     {
         $parts = Part::query()
@@ -33,8 +36,8 @@ class PartController extends Controller
 
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $path = $file->store('media', 'public');
-                $part->media()->create(['path' => $path]);
+                $mediaData = $this->imageService->compressAndStore($file, 'media');
+                $part->media()->create($mediaData);
             }
         }
 
@@ -59,8 +62,8 @@ class PartController extends Controller
 
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $path = $file->store('media', 'public');
-                $part->media()->create(['path' => $path]);
+                $mediaData = $this->imageService->compressAndStore($file, 'media');
+                $part->media()->create($mediaData);
             }
         }
 

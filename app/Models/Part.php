@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\PartFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,7 +23,34 @@ class Part extends Model
         'release_year',
         'summary',
         'trailer_url',
+        'poster_path',
     ];
+
+    /**
+     * Get the part's poster URL.
+     */
+    protected function poster(): Attribute
+    {
+        return Attribute::make(
+            get: function (?string $value) {
+                $url = $this->poster_path;
+                if (! $url) {
+                    // Fallback to Media model if exists
+                    $media = $this->media()->first();
+                    if ($media) {
+                        return asset('storage/'.$media->path);
+                    }
+
+                    return null;
+                }
+                if (str_starts_with($url, 'http')) {
+                    return $url;
+                }
+
+                return asset('storage/'.$url);
+            },
+        );
+    }
 
     /**
      * Get the episodes for the season.

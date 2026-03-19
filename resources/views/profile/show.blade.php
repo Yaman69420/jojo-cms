@@ -133,7 +133,7 @@
 
                 <div class="pt-4">
                     <button type="submit" class="w-full bg-indigo-600 text-white bangers text-3xl py-4 jojo-border jojo-shadow hover:bg-indigo-500 transform hover:-translate-y-1 transition-all uppercase tracking-widest">
-                        Save Soul Data
+                        Save Profile
                     </button>
                 </div>
             </form>

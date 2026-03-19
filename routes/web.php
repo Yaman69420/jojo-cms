@@ -4,8 +4,8 @@ use App\Http\Controllers\Admin\EpisodeController as AdminEpisodeController;
 use App\Http\Controllers\Admin\PartController as AdminPartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EpisodeController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FriendshipController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserPerkController;
@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{userId?}', function ($userId = null) {
         return view('chat', ['userId' => $userId]);
     })->name('chat');
-    Route::get('/sanctuary', fn() => redirect()->route('profile.show', Auth::user()))->name('sanctuary');
+    Route::get('/me', fn () => redirect()->route('profile.show', Auth::user()))->name('profile.me');
 });
 
 // Public Resource Routes

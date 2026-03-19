@@ -5,7 +5,6 @@
         <div class="bg-purple-900 p-8 jojo-border jojo-shadow relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 text-white opacity-5 select-none pointer-events-none text-9xl bangers rotate-12">REQUESTS</div>
             <h2 class="text-5xl text-yellow-400 bangers transform -skew-x-6 tracking-widest drop-shadow-lg mb-2">PENDING REQUESTS</h2>
-            <p class="text-fuchsia-300 font-bold uppercase tracking-widest">Who wants to join your Joestar bloodline?</p>
         </div>
     </div>
 

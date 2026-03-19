@@ -13,10 +13,8 @@
         @forelse($parts as $part)
             <div class="bg-white text-purple-900 jojo-border jojo-shadow overflow-hidden group hover:scale-[1.02] transition-transform flex flex-col">
                 <div class="h-48 bg-purple-900 relative overflow-hidden flex items-center justify-center border-b-4 border-slate-900">
-                    @if($part->poster_path)
-                        <img src="{{ asset('storage/' . $part->poster_path) }}" class="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity">
-                    @elseif($part->media->first())
-                        <img src="{{ asset('storage/' . $part->media->first()->path) }}" class="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity">
+                    @if($part->poster)
+                        <img src="{{ $part->poster }}" class="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity">
                     @else
                         <div class="text-6xl font-black text-yellow-400 opacity-20">PART {{ $part->number }}</div>
                     @endif

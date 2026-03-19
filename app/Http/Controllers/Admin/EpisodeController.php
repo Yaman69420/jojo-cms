@@ -7,10 +7,13 @@ use App\Http\Requests\StoreEpisodeRequest;
 use App\Http\Requests\UpdateEpisodeRequest;
 use App\Models\Episode;
 use App\Models\Part;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 
 class EpisodeController extends Controller
 {
+    public function __construct(protected ImageService $imageService) {}
+
     public function index(Request $request)
     {
         $episodes = Episode::query()
@@ -39,8 +42,8 @@ class EpisodeController extends Controller
 
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $path = $file->store('media', 'public');
-                $episode->media()->create(['path' => $path]);
+                $mediaData = $this->imageService->compressAndStore($file, 'media');
+                $episode->media()->create($mediaData);
             }
         }
 
@@ -67,8 +70,8 @@ class EpisodeController extends Controller
 
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $path = $file->store('media', 'public');
-                $episode->media()->create(['path' => $path]);
+                $mediaData = $this->imageService->compressAndStore($file, 'media');
+                $episode->media()->create($mediaData);
             }
         }
 

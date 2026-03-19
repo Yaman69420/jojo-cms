@@ -9,6 +9,9 @@ class Media extends Model
 {
     protected $fillable = [
         'path',
+        'original_name',
+        'mime_type',
+        'size',
         'mediable_id',
         'mediable_type',
     ];
