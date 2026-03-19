@@ -18,7 +18,7 @@ class HomeController extends Controller
             'users' => User::count(),
         ];
 
-        $latestEpisode = Episode::with(['part', 'media'])
+        $latestEpisode = Episode::with(['part'])
             ->join('parts', 'episodes.part_id', '=', 'parts.id')
             ->orderBy('parts.number', 'desc')
             ->orderBy('episodes.episode_number', 'desc')
@@ -26,7 +26,7 @@ class HomeController extends Controller
             ->first();
 
         $topEpisodes = Episode::query()
-            ->with(['part', 'media'])
+            ->with(['part'])
             ->withAvg('ratings as ratings_avg_rating', 'rating')
             ->orderByDesc('ratings_avg_rating')
             ->orderByDesc('imdb_score')
